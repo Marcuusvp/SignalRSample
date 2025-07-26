@@ -5,7 +5,23 @@ namespace SignalRSample.Hubs;
 public class UserHub : Hub 
 {
     public static int TotalViews { get; set; } = 0;
+    public static int TotalUsers { get; set; } = 0;
 
+    public override async Task OnConnectedAsync()
+    {
+        TotalUsers++;
+        //Teste com método assincrono usando await padrao
+        await Clients.All.SendAsync("updateTotalUsers", TotalUsers);
+        await base.OnConnectedAsync();
+    }
+
+    public override Task OnDisconnectedAsync(Exception? exception)
+    {
+        TotalUsers--;
+        //Teste com método síncrono usando getAwaiter
+        Clients.All.SendAsync("updateTotalUsers", TotalUsers).GetAwaiter().GetResult();
+        return base.OnDisconnectedAsync(exception);
+    }
 
     public async Task NewWindowLoaded() 
     {
