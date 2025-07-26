@@ -1,6 +1,9 @@
 ﻿//create connection
 //Primeiro passo é a conexao via o endpoint do hub
-var connectionUserCount = new signalR.HubConnectionBuilder().withUrl("/hubs/userCount").build();
+//Uma observação, o signalR pode usar WebSockets, Server-Sent Events ou Long Polling como transporte. Basta alterar o HttpTransportType na conexão.
+var connectionUserCount = new signalR.HubConnectionBuilder()
+    .configureLogging(signalR.LogLevel.Information) //Configura o nível de log do SignalR
+    .withUrl("/hubs/userCount", signalR.HttpTransportType.WebSockets).build();
 
 //connect to methods that hub invokes(receive) messages from hub
 //Segundo passo, conecta no método que esta no sendAsync no hub -> updateTotalViews
