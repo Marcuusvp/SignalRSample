@@ -18,6 +18,9 @@ connectionUserCount.on("updateTotalUsers", (value) => {
 //invoke hub methods aka send notification to hub
 //Terceiro passo, envia uma mensagem para o hub via o método criado no hub -> NewWindowLoaded
 function newWindowLoadedOnClient() {
+    //Qual a diferença entre connectionUserCount.send e connectionUserCount.invoke?
+    //connectionUserCount.send é usado para enviar uma mensagem ao hub sem esperar uma resposta.
+    //connectionUserCount.invoke é usado para enviar uma mensagem ao hub e esperar uma resposta.
     connectionUserCount.send("NewWindowLoaded");
 }
 
