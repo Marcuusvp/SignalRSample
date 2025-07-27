@@ -24,7 +24,8 @@ public class HouseGroupHub : Hub
             }
 
             await Clients.Caller.SendAsync("subscriptionStatus", houseList, houseName, true);
-
+            //Envia para todos os clientes conectados, menos o que está chamando
+            await Clients.Others.SendAsync("newMemberAddtoHouse", houseName);
             await Groups.AddToGroupAsync(Context.ConnectionId, houseName);
         }
     }
@@ -45,7 +46,8 @@ public class HouseGroupHub : Hub
             }
 
             await Clients.Caller.SendAsync("subscriptionStatus", houseList, houseName, false);
-
+            //Envia para todos os clientes conectados, menos o que está chamando, tipo o Others, mas usando o AllExcept
+            await Clients.AllExcept(Context.ConnectionId).SendAsync("newMemberRemovedFromHouse", houseName);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, houseName);
         }
     }
