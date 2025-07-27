@@ -4,6 +4,7 @@ namespace SignalRSample.Hubs;
 
 public class HouseGroupHub : Hub
 {
+    //TODOS OS CLIENTES QUE CHAMAM ESSE HUB ESTAO NO ARQUIVO houseGroup.js -> WWWROOT/js/houseGroup.js
     public static List<string> GroupsJoined { get; set; } = new List<string>();
 
     public async Task JoinHouse(string houseName)
@@ -50,5 +51,11 @@ public class HouseGroupHub : Hub
             await Clients.AllExcept(Context.ConnectionId).SendAsync("newMemberRemovedFromHouse", houseName);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, houseName);
         }
+    }
+
+    //Lembrando sempre, o método 'TriggerHouseNotify' é chamado pelo cliente, e não pelo servidor.
+    public async Task TriggerHouseNotify(string houseName)
+    {
+        await Clients.Group(houseName).SendAsync("triggerHouseNotification", houseName);
     }
 }
